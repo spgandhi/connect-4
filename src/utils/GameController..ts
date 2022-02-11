@@ -26,6 +26,11 @@ export default class GameController {
     this.maxCols = cols;
   }
 
+  // Getters
+  getGameStatus() {
+    return this.gameStatus;
+  }
+
   // Find the next available cell in a given column
   private getFirstEmptyCellInColumn(column: number) {
     return this.player1Moves.filter(item => item[1] === column).length + this.player2Moves.filter(item => item[1] === column).length;
