@@ -2,14 +2,13 @@ import React from "react";
 
 interface Props {
   color: "red" | "blue" | "white";
-  onClick: () => void;
-  children: React.ReactNode;
+  size?: "sm" | "md";
 }
 
 function Cell(props: Props) {
-  const { color, children } = props;
+  const { color, size = 12 } = props;
 
-  let colorClassName = "bg-gray-500";
+  let colorClassName = "bg-white";
 
   switch (color) {
     case "red":
@@ -20,10 +19,13 @@ function Cell(props: Props) {
       break;
   }
 
+  const sizeClass = size === "sm" ? "h-4 w-4" : "h-12 w-12";
+
   return (
-    <div {...props} className={`w-12 h-12 ${colorClassName} rounded-full`}>
-      {children}
-    </div>
+    <span
+      {...props}
+      className={`${sizeClass} ${colorClassName} rounded-full`}
+    />
   );
 }
 

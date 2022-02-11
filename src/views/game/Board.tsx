@@ -7,11 +7,11 @@ interface Props {
   columns: number;
   player1Moves: number[][];
   player2Moves: number[][];
-  onCellClick: (cellName: number) => void;
+  onColumnClick: (cellName: number) => void;
 }
 
 function Board(props: Props) {
-  const { rows, columns, onCellClick, player1Moves, player2Moves } = props;
+  const { rows, columns, onColumnClick, player1Moves, player2Moves } = props;
 
   const getCellColor = (cellName: [number, number]) => {
     if (existsIn2DArray(player1Moves, cellName)) {
@@ -24,18 +24,18 @@ function Board(props: Props) {
   };
 
   return (
-    <div className="flex flex-col-reverse gap-y-4">
-      {Array.from(Array(rows).keys()).map((rowIndex) => (
-        <div key={`row-${rowIndex}`} className="flex gap-x-4">
-          {Array.from(Array(columns).keys()).map((colIndex) => (
+    <div className="inline-flex flex-row gap-x-4 bg-green-500 p-4  rounded-xl">
+      {Array.from(Array(columns).keys()).map((colIndex) => (
+        <div
+          key={`row-${colIndex}`}
+          className="flex flex-col-reverse gap-y-4 cursor-pointer"
+          onClick={() => onColumnClick(colIndex)}
+        >
+          {Array.from(Array(rows).keys()).map((rowIndex) => (
             <Cell
-              onClick={() => onCellClick(colIndex)}
               key={`cell-${rowIndex}-${colIndex}`}
               color={getCellColor([rowIndex, colIndex])}
-            >
-              {rowIndex}
-              {colIndex}
-            </Cell>
+            ></Cell>
           ))}
         </div>
       ))}

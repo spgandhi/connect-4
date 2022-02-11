@@ -2,6 +2,8 @@ import React from "react";
 import Board from "./Board";
 import GameController from "../../utils/GameController.";
 import Button from "../../components/Button";
+import Message from "./Message";
+import Cell from "./Cell";
 
 interface Props {}
 
@@ -10,6 +12,7 @@ interface State {
   player2Moves: number[][];
   errorMessage: string;
   gameStatus: 0 | 1 | undefined;
+  currentTurn?: 0 | 1;
   winningPlayer?: string;
 }
 
@@ -26,31 +29,31 @@ class Game extends React.Component<Props, State> {
     };
 
     this.gameController = new GameController({ rows: 7, cols: 6 });
-    this.handleClick = this.handleClick.bind(this);
-    this.handleStartGame = this.handleStartGame.bind(this);
+    this.handleColumnClick = this.handleColumnClick.bind(this);
     this.handleResetGame = this.handleResetGame.bind(this);
   }
 
-  handleStartGame() {
-    this.gameController.startGame();
-    this.setState({
-      gameStatus: this.gameController.getGameStatus(),
-    });
-  }
-
   handleResetGame() {
-    this.setState({
-      player1Moves: [],
-      player2Moves: [],
-    });
-    this.gameController.startGame();
-  }
-
-  handleClick(column: number) {
-    const nextState = this.gameController.playTurn(column);
+    const nextState = this.gameController.startGame();
     this.setState({
       ...nextState,
     });
+  }
+
+  handleColumnClick(column: number) {
+    if (this.state.gameStatus === 0) {
+      this.gameController.startGame();
+    }
+    const nextState = this.gameController.playTurn(column);
+    this.setState({
+      errorMessage: "",
+      ...nextState,
+    });
+  }
+
+  getPlayerCellHtml() {
+    const { currentTurn } = this.state;
+    return <Cell color={currentTurn === 0 ? "red" : "blue"} size={"sm"} />;
   }
 
   render() {
@@ -60,28 +63,46 @@ class Game extends React.Component<Props, State> {
       player2Moves,
       gameStatus,
       winningPlayer,
+      currentTurn,
     } = this.state;
     return (
       <div>
-        {JSON.stringify(this.state)}
-        <Board
-          player1Moves={player1Moves}
-          player2Moves={player2Moves}
-          rows={6}
-          columns={7}
-          onCellClick={this.handleClick}
-        />
-        {typeof winningPlayer === "number" &&
-          "Winner is Player " + (winningPlayer + 1)}
+        <div className="mb-4">
+          <Board
+            player1Moves={player1Moves}
+            player2Moves={player2Moves}
+            rows={6}
+            columns={7}
+            onColumnClick={this.handleColumnClick}
+          />
+        </div>
+        <div>
+          <Message>
+            {gameStatus === 1 && typeof currentTurn === "number" && (
+              <div className="flex justify-center items-center gap-x-4">
+                <div>Player {currentTurn + 1} turn</div>{" "}
+                <div className="flex">{this.getPlayerCellHtml()}</div>
+              </div>
+            )}
+            {typeof winningPlayer === "number" && (
+              <div className="flex justify-center items-center gap-x-4">
+                <div>!!! Player {winningPlayer + 1} wins !!! </div>
+                <div className="flex">{this.getPlayerCellHtml()}</div>
+              </div>
+            )}
+            {winningPlayer === "draw" && <div>!!! Draw !!!</div>}
+          </Message>
+        </div>
 
-        {gameStatus === 0 && (
-          <Button onClick={this.handleStartGame}>Start New Game</Button>
-        )}
-
-        {gameStatus === 1 && (
-          <Button onClick={this.handleResetGame}>Reset Game</Button>
-        )}
-        {errorMessage}
+        <div className="my-4">{errorMessage}</div>
+        <div>
+          {gameStatus === 0 && (
+            <Button onClick={this.handleResetGame}>Start New Game</Button>
+          )}
+          {gameStatus === 1 && (
+            <Button onClick={this.handleResetGame}>Reset Game</Button>
+          )}
+        </div>
       </div>
     );
   }

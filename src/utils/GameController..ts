@@ -10,7 +10,7 @@ export default class GameController {
 
   public player1Moves: number[][];
   public player2Moves: number[][];
-  public winningPlayer: 0 | 1 | null;
+  public winningPlayer: 0 | 1 | 'draw' | null;
   public winningSegment: string[][];
 
 
@@ -127,12 +127,26 @@ export default class GameController {
     this.player2Moves = [];
     this.gameStatus = 1;
     this.currentTurn = 0;
+    this.winningPlayer = null;
+    this.winningSegment = [];
+
+    return {
+      gameStatus: this.gameStatus,
+      currentTurn: this.currentTurn,
+      lastMove: this.lastMove,
+      winningPlayer: this.winningPlayer,
+      winningSegment: this.winningSegment,
+      player1Moves: this.player1Moves,
+      player2Moves: this.player2Moves
+    }
   }
 
   playTurn(column: number) {
+    
     if (this.gameStatus === 0) return;
 
     const row = this.getFirstEmptyCellInColumn(column);
+
     if(row  >= this.maxRows - 1) return {
       error: true,
       errorMessage: 'Column is full'
@@ -153,6 +167,12 @@ export default class GameController {
       this.winningSegment = gameResult.segment;
     } else {
       this.currentTurn = this.currentTurn === 0 ? 1 : 0;
+    }
+
+    // Game draw situation
+    if(this.player1Moves.length + this.player2Moves.length === this.maxRows * this.maxCols) {
+      this.gameStatus = 0;
+      this.winningPlayer = 'draw'
     }
 
     return {
