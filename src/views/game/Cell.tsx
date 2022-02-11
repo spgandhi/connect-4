@@ -2,23 +2,29 @@ import React from "react";
 
 interface Props {
   color: "red" | "blue" | "white";
+  onClick: () => void;
+  children: React.ReactNode;
 }
 
 function Cell(props: Props) {
-  const {} = props;
+  const { color, children } = props;
 
-  let color = "bg-gray-500";
+  let colorClassName = "bg-gray-500";
 
   switch (color) {
     case "red":
-      color = "bg-red-500";
+      colorClassName = "bg-red-500";
       break;
     case "blue":
-      color = "bg-blue-500";
+      colorClassName = "bg-blue-500";
       break;
   }
 
-  return <div className={`w-4 h-4 ${color} rounded-full`}></div>;
+  return (
+    <div {...props} className={`w-12 h-12 ${colorClassName} rounded-full`}>
+      {children}
+    </div>
+  );
 }
 
 export default Cell;
