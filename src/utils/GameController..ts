@@ -31,13 +31,35 @@ export default class GameController {
     return this.gameStatus;
   }
 
+  getGameState() { 
+    return {
+      gameStatus: this.gameStatus,
+      currentTurn: this.currentTurn,
+      lastMove: this.lastMove,
+      winningPlayer: this.winningPlayer,
+      winningSegment: this.winningSegment,
+      player1Moves: this.player1Moves,
+      player2Moves: this.player2Moves
+    }
+  }
+
   // Find the next available cell in a given column
   private getFirstEmptyCellInColumn(column: number) {
     return this.player1Moves.filter(item => item[1] === column).length + this.player2Moves.filter(item => item[1] === column).length;
   }
 
+
   // Tests if the player who played the turn last has the given segment in their moves
   private isWinningSegment(segment: any) {
+
+    /**
+     * Logic
+     * 1. Check Segment length. It should be exactly 4 for a winning condition
+     * 2. Check the player who played the last turn
+     * 3. Check if all the segment items should exist in the player's moves
+     * 
+     */
+
     if (segment.length !== 4) return false;
     const currentPlayerItems = this.currentTurn === 0 ? this.player1Moves : this.player2Moves;
     return segment.every((item: any) => {
@@ -101,10 +123,18 @@ export default class GameController {
     return false;
   }
 
-  // Check if the game  is over
   private isGameOver() {
+
+     /* Logic
+      1. Find the focal point i.e. the cell where the last move was made  
+      2. Find the min and max coordinates that can give a winning conditions with Focal Point included
+      3. Given the focal point, min ad max coordinates, check all possible horizontal, vertical and diagonal segments for win conditions
+    */
+
+    // Last move should be avaialble to check winning conditions
     if(!this.lastMove) return;
 
+   
     const focalRow = this.lastMove[0];
     const focalCol = this.lastMove[1];
 
@@ -114,15 +144,13 @@ export default class GameController {
     const minYCord = Math.max(focalRow - 3, 0);
     const maxYCord = Math.min(focalRow + 3, 6);
 
-    console.log( focalRow, focalCol, minXCord, maxXCord, minYCord, maxYCord);
-
     return this.checkHorizontalWin({focalRow, minXCord, maxXCord}) ||
     this.checkVerticalWin({focalCol, minYCord, maxYCord}) ||
     this.checkForwardSlashSegments({ focalRow, focalCol, minRow: minYCord, minCol: minXCord, maxRow: maxYCord, maxCol: maxXCord }) ||
     this.checkBackwardSlashSegments({ focalRow, focalCol, minRow: minYCord, minCol: minXCord, maxRow: maxYCord, maxCol: maxXCord })
   }
 
-  startGame() {
+  resetGame() {
     this.player1Moves = [];
     this.player2Moves = [];
     this.gameStatus = 1;
@@ -130,15 +158,7 @@ export default class GameController {
     this.winningPlayer = null;
     this.winningSegment = [];
 
-    return {
-      gameStatus: this.gameStatus,
-      currentTurn: this.currentTurn,
-      lastMove: this.lastMove,
-      winningPlayer: this.winningPlayer,
-      winningSegment: this.winningSegment,
-      player1Moves: this.player1Moves,
-      player2Moves: this.player2Moves
-    }
+    return this.getGameState();
   }
 
   playTurn(column: number) {
@@ -170,19 +190,11 @@ export default class GameController {
     }
 
     // Game draw situation
-    if(this.player1Moves.length + this.player2Moves.length === this.maxRows * this.maxCols) {
+    if(!this.winningPlayer && this.player1Moves.length + this.player2Moves.length === this.maxRows * this.maxCols) {
       this.gameStatus = 0;
       this.winningPlayer = 'draw'
     }
 
-    return {
-      gameStatus: this.gameStatus,
-      winningPlayer: this.winningPlayer,
-      winningSegment: this.winningSegment,
-      currentTurn: this.currentTurn,
-      lastMove: this.lastMove,
-      player1Moves: this.player1Moves,
-      player2Moves: this.player2Moves
-    }
+    return this.getGameState();
   }
 }

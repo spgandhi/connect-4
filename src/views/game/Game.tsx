@@ -34,15 +34,16 @@ class Game extends React.Component<Props, State> {
   }
 
   handleResetGame() {
-    const nextState = this.gameController.startGame();
+    const nextState = this.gameController.resetGame();
     this.setState({
       ...nextState,
     });
   }
 
   handleColumnClick(column: number) {
+    // Start the game if not already
     if (this.state.gameStatus === 0) {
-      this.gameController.startGame();
+      this.gameController.resetGame();
     }
     const nextState = this.gameController.playTurn(column);
     this.setState({
@@ -53,7 +54,12 @@ class Game extends React.Component<Props, State> {
 
   getPlayerCellHtml() {
     const { currentTurn } = this.state;
-    return <Cell color={currentTurn === 0 ? "red" : "blue"} size={"sm"} />;
+    return (
+      <Cell
+        className={currentTurn === 0 ? "player-1-cell" : "player-2-cell"}
+        size={"sm"}
+      />
+    );
   }
 
   render() {

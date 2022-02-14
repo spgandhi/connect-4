@@ -1,7 +1,6 @@
 import React from "react";
-import "./App.css";
-import Header from "./views/header/Header";
-import Game from "./views/game/Game";
+import Header from "./header/Header";
+import Game from "./game/Game";
 
 function App() {
   return (

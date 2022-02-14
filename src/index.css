@@ -15,3 +15,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cell {
+  @apply bg-white
+}
+
+.player-1-cell {
+  @apply bg-red-500
+}
+
+.player-2-cell {
+  @apply bg-blue-500
+}

@@ -13,11 +13,11 @@ interface Props {
 function Board(props: Props) {
   const { rows, columns, onColumnClick, player1Moves, player2Moves } = props;
 
-  const getCellColor = (cellName: [number, number]) => {
+  const getPlayerCellClassName = (cellName: [number, number]) => {
     if (existsIn2DArray(player1Moves, cellName)) {
-      return "red";
+      return "player-1-cell";
     } else if (existsIn2DArray(player2Moves, cellName)) {
-      return "blue";
+      return "player-2-cell";
     } else {
       return "white";
     }
@@ -34,7 +34,7 @@ function Board(props: Props) {
           {Array.from(Array(rows).keys()).map((rowIndex) => (
             <Cell
               key={`cell-${rowIndex}-${colIndex}`}
-              color={getCellColor([rowIndex, colIndex])}
+              className={getPlayerCellClassName([rowIndex, colIndex])}
             ></Cell>
           ))}
         </div>
