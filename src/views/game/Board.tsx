@@ -7,16 +7,28 @@ interface Props {
   columns: number;
   player1Moves: number[][];
   player2Moves: number[][];
+  winningSegment: number[][];
   onColumnClick: (cellName: number) => void;
 }
 
 function Board(props: Props) {
-  const { rows, columns, onColumnClick, player1Moves, player2Moves } = props;
+  const {
+    rows,
+    columns,
+    onColumnClick,
+    player1Moves,
+    player2Moves,
+    winningSegment,
+  } = props;
 
-  const getPlayerCellClassName = (cellName: [number, number]) => {
-    if (existsIn2DArray(player1Moves, cellName)) {
+  const isWinningCell = (cell: number[]) => {
+    return existsIn2DArray(winningSegment, cell);
+  };
+
+  const getPlayerCellClassName = (cell: number[]) => {
+    if (existsIn2DArray(player1Moves, cell)) {
       return "player-1-cell";
-    } else if (existsIn2DArray(player2Moves, cellName)) {
+    } else if (existsIn2DArray(player2Moves, cell)) {
       return "player-2-cell";
     } else {
       return "white";
@@ -34,7 +46,9 @@ function Board(props: Props) {
           {Array.from(Array(rows).keys()).map((rowIndex) => (
             <Cell
               key={`cell-${rowIndex}-${colIndex}`}
-              className={getPlayerCellClassName([rowIndex, colIndex])}
+              className={`${getPlayerCellClassName([rowIndex, colIndex])}${
+                isWinningCell([rowIndex, colIndex]) ? " winning-cell" : ""
+              }`}
             ></Cell>
           ))}
         </div>

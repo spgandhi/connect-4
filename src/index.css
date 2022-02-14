@@ -24,6 +24,16 @@ code {
   @apply bg-red-500
 }
 
+.player-1-cell.winning-cell {
+  @apply bg-red-800;
+  @apply drop-shadow-2xl;
+}
+
 .player-2-cell {
   @apply bg-blue-500
+}
+
+.player-2-cell.winning-cell {
+  @apply bg-blue-800;
+  @apply drop-shadow-2xl;
 }

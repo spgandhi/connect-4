@@ -7,6 +7,8 @@ interface Props {
 function Message(props: Props) {
   const { children } = props;
 
+  if (!children) return null;
+
   return (
     <div className="bg-black text-white py-4 rounded-lg text-center text-lg font-bold">
       {children}

@@ -14,8 +14,10 @@ interface State {
   gameStatus: 0 | 1 | undefined;
   currentTurn?: 0 | 1;
   winningPlayer?: string;
+  winningSegment: [][];
 }
 
+// @todo: convert to a functional component
 class Game extends React.Component<Props, State> {
   private gameController: any;
 
@@ -26,6 +28,7 @@ class Game extends React.Component<Props, State> {
       player2Moves: [],
       errorMessage: "",
       gameStatus: 0,
+      winningSegment: [],
     };
 
     this.gameController = new GameController({ rows: 7, cols: 6 });
@@ -70,6 +73,7 @@ class Game extends React.Component<Props, State> {
       gameStatus,
       winningPlayer,
       currentTurn,
+      winningSegment,
     } = this.state;
     return (
       <div>
@@ -80,6 +84,7 @@ class Game extends React.Component<Props, State> {
             rows={6}
             columns={7}
             onColumnClick={this.handleColumnClick}
+            winningSegment={winningSegment}
           />
         </div>
         <div>
