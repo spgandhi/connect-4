@@ -1,5 +1,6 @@
 import { existsIn2DArray } from "./utils";
 
+// Algorithm inspired from: https://rossta.net/blog/finding-four-in-a-row-ftw.html
 export default class GameController {
 
   private gameStatus: 0 | 1;
@@ -68,6 +69,8 @@ export default class GameController {
     })
 
   }
+
+  // @todo: optimise the loop algorithm to not run for the segments that has cells outside the board
 
   // Test all possible horizontal segments for a win that includes the last move
   private checkHorizontalWin({focalRow, minXCord, maxXCord}: any) {
