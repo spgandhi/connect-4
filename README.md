@@ -2,6 +2,8 @@
 
 This is a react implementation of Connect 4 game. To learn more about the game, visit - https://www.mathsisfun.com/games/connect4.html
 
+You can view the live project here - https://stairwell-connect4.surge.sh/
+
 ## Tech Stack
 
 This app is built using [Create React App](https://create-react-app.dev/) boilterplate with Typescript and uses [Tailwind CSS](https://tailwindcss.com/) for styling.
@@ -11,8 +13,8 @@ This app is built using [Create React App](https://create-react-app.dev/) boilte
 To develop the app locally, clone the repository. Then in the project root directory, do the following  - 
 
 1. Install dependencies by running `yarn` or `npm install`
-2. Start the development server `yarn start` or `npm run start`
-3. Visit `localhost:3000`
+2. Start the development server by running `yarn start` or `npm run start`
+3. Visit `http://localhost:3000`
 
 ## Deployment
 
